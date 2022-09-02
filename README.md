@@ -1,5 +1,6 @@
 # BTree
 BTree implementation imported from SqueakSource
+The current repository is waiting for getting cleaned and prepared for inclusion in containers. 
 
 ### Load it from a workspace
 Open a workspace and evaluate:
