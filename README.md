@@ -6,7 +6,7 @@ The current repository is waiting for getting cleaned and prepared for inclusion
 Open a workspace and evaluate:
 
     Metacello new
-      repository: 'github://sebastianconcept/BTree';
+      repository: 'github://pharo-containers/BTree';
       baseline: 'BTree';
       load.
 
@@ -16,7 +16,7 @@ I suggest you use your `baseline: spec` method and inside your version block cod
     btree: spec
       spec
       baseline: 'BTree'
-      with: [ spec repository: 'github://sebastianconcept/BTree:master/src' ]
+      with: [ spec repository: 'github://pharo-containers/BTree/src' ]
 ### Source and credits
 - Imported it from [SqueakSource](http://www.squeaksource.com/BTree/).
 - [Avi Bryant](https://twitter.com/avibryant)
