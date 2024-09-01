@@ -1,30 +1,31 @@
 Class {
-	#name : #BTreeStringKeys,
-	#superclass : #BTreeKeys,
+	#name : 'BTreeStringKeys',
+	#superclass : 'BTreeKeys',
 	#instVars : [
 		'keys',
 		'prefix',
 		'abbreviations'
 	],
-	#category : #'Collections-BTree-Core'
+	#category : 'Collections-BTree',
+	#package : 'Collections-BTree'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys class >> new [
 	^ self new: 8
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys class >> new: aNumber [
 	^ self basicNew initializeWithSize: aNumber
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> abbreviationSize [
 	^ 3
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> abbreviationsAndIndicesDo: aBlock [
 	| stream |
 	stream := abbreviations readStream.
@@ -35,18 +36,18 @@ BTreeStringKeys >> abbreviationsAndIndicesDo: aBlock [
 			ifTrue: [aBlock value: nil value: i]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> at: aNumber [
 	^ keys at: aNumber
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> at: aNumber put: aString [
 	keys at: aNumber put: aString.
 	prefix := self nilPrefix.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> buildAbbreviationsFrom: readStreams [
 	| nextChars |
 	1 to: self abbreviationSize do:
@@ -58,7 +59,7 @@ BTreeStringKeys >> buildAbbreviationsFrom: readStreams [
 	^ abbreviations
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> extractPrefixFrom: readStreams [
 	| prefixStream nextChars |
 	prefixStream := String new writeStream.
@@ -72,7 +73,7 @@ BTreeStringKeys >> extractPrefixFrom: readStreams [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> findIndexForKey: aString [
 	| stream str diff |
 	prefix = self nilPrefix ifTrue: [self rebuildAbbreviations].
@@ -88,18 +89,18 @@ BTreeStringKeys >> findIndexForKey: aString [
 	^ self size
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> initializeWithSize: aNumber [
 	keys := Array new: aNumber.
 	prefix := self nilPrefix.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> nilPrefix [
 	^ '^^^'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> rebuildAbbreviations [
 	| keyStreams filled |
 	filled := keys count: [:ea | ea notNil].
@@ -112,7 +113,7 @@ BTreeStringKeys >> rebuildAbbreviations [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeStringKeys >> size [
 	^ keys size
 ]

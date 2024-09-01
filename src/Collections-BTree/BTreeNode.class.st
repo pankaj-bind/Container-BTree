@@ -1,20 +1,21 @@
 Class {
-	#name : #BTreeNode,
-	#superclass : #Object,
-	#type : #variable,
+	#name : 'BTreeNode',
+	#superclass : 'Object',
+	#type : 'variable',
 	#instVars : [
 		'parent',
 		'keys'
 	],
-	#category : #'Collections-BTree-Core'
+	#category : 'Collections-BTree',
+	#package : 'Collections-BTree'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeNode class >> keys: anArray [
 	^ (self new: (anArray size)) keys: anArray
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTreeNode >> allChildrenDo: aBlock [
 	self childrenDo:
 		[:ea |
@@ -22,37 +23,37 @@ BTreeNode >> allChildrenDo: aBlock [
 		ea allChildrenDo: aBlock]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTreeNode >> allLeavesDo: aBlock [
 	self withAllChildrenDo: [:ea | ea isLeaf ifTrue: [aBlock value: ea]]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 BTreeNode >> canGrow [
 	^ keys canGrow
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 BTreeNode >> canShrink [
 	^ keys canShrink
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTreeNode >> children [
 	^ Array streamContents: [:s | self childrenDo: [:ea | s nextPut: ea]]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTreeNode >> childrenDo: aBlock [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTreeNode >> depth [
 	^ parent ifNil: [1] ifNotNil: [1 + parent depth]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> ensureParent [
 	parent ifNil:
 		 [self parent: (self interiorNodeClass keys: keys emptyCopy).
@@ -60,17 +61,17 @@ BTreeNode >> ensureParent [
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTreeNode >> first [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTreeNode >> firstKey [
 	^ keys first
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> grow [
 	| sibling |
 	parent ifNotNil:
@@ -82,7 +83,7 @@ BTreeNode >> grow [
 				
 ]
 
-{ #category : #inserting }
+{ #category : 'inserting' }
 BTreeNode >> insertKey: aMagnitude value: anObject [
 	| index key |
 	index := keys findIndexForKey: aMagnitude.
@@ -112,57 +113,57 @@ BTreeNode >> insertKey: aMagnitude value: anObject [
 	^ (parent childForKey: aMagnitude) insertKey: aMagnitude value: anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> insertKey: aMagnitude value: anObject at: index [
 	keys at: index put: aMagnitude.
 	self at: index put: anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> interiorNodeClass [
 	^ BTreeInteriorNode
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 BTreeNode >> isLeaf [
 	self subclassResponsibility
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> keyArray [
 	^ keys
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> keys: anArray [
 	keys := anArray
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTreeNode >> keysAndValuesDo: aBlock [
 	keys withIndexDo:
 		[:key :i |
 		key ifNotNil: [aBlock value: key value: (self at: i)]]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTreeNode >> keysDo: aBlock [
 	keys withIndexDo:
 		[:key :i |
 		key ifNotNil: [aBlock value: key] ifNil: [^ self]]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTreeNode >> last [
 	self subclassResponsibility
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTreeNode >> leavesFrom: start to: end do: aBlock [
 	self subclassResponsibility
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> mergeWith: aNode [		
 	| oldKey |
 	oldKey := self firstKey.
@@ -173,22 +174,22 @@ BTreeNode >> mergeWith: aNode [
 	parent updateKey: oldKey to: self firstKey.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTreeNode >> parent [
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTreeNode >> parent: aBTreeNode [
 	parent := aBTreeNode
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 BTreeNode >> removeKey: aMagnitude [
 	self removeKey: aMagnitude ifAbsent: [self error: aMagnitude printString, ' not found.'].
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 BTreeNode >> removeKey: aMagnitude ifAbsent: aBlock [
 	| index key |
 	self canShrink ifFalse: [self grow].
@@ -203,14 +204,14 @@ BTreeNode >> removeKey: aMagnitude ifAbsent: aBlock [
 	index = 1 ifTrue: [parent ifNotNil: [parent updateKey: key to: self firstKey]]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTreeNode >> root [
 	^ parent
 		ifNil: [self]
 		ifNotNil: [parent root]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> shiftLeftTo: index [
 	keys shiftLeftTo: index.
 	index to: self size - 1 by: 1 do:
@@ -219,7 +220,7 @@ BTreeNode >> shiftLeftTo: index [
 	self at: self size put: nil.
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> shiftRightFrom: index [
 	keys shiftRightFrom: index.
 	self size to: index+1 by: -1 do:
@@ -227,7 +228,7 @@ BTreeNode >> shiftRightFrom: index [
 		self at: i put: (self at: i-1)]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> split [
 	| other midpoint |
 	other := self class keys: keys emptyCopy.
@@ -241,7 +242,7 @@ BTreeNode >> split [
 	self ensureParent insertKey: other firstKey value: other
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTreeNode >> stealFrom: aNode [
 	| key value |
 	aNode firstKey > self firstKey
@@ -253,17 +254,17 @@ BTreeNode >> stealFrom: aNode [
 	aNode removeKey: key
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTreeNode >> values [
 	^ Array streamContents: [:s | self valuesDo: [:ea | s nextPut: ea]]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTreeNode >> valuesDo: aBlock [
 	self keysAndValuesDo: [:k :v | aBlock value: v]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTreeNode >> withAllChildrenDo: aBlock [
 	aBlock value: self.
 	self allChildrenDo: aBlock.

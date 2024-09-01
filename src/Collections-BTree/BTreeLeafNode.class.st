@@ -1,16 +1,17 @@
 Class {
-	#name : #BTreeLeafNode,
-	#superclass : #BTreeNode,
-	#type : #variable,
-	#category : #'Collections-BTree-Core'
+	#name : 'BTreeLeafNode',
+	#superclass : 'BTreeNode',
+	#type : 'variable',
+	#category : 'Collections-BTree',
+	#package : 'Collections-BTree'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> childrenDo: aBlock [
 	"no children"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> commonKeysWith: aNode keysAndValuesDo: aBlock flip: aBoolean [
 	| index key block leaf advanceKey last |
 
@@ -40,37 +41,37 @@ BTreeLeafNode >> commonKeysWith: aNode keysAndValuesDo: aBlock flip: aBoolean [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> depth [
 	^ 1
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> existingLeafForKey: aMagnitude [
        ^ self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> first [
 	^ self values first
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> isLeaf [
 	^ true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> keys [
 	^ Array streamContents: [:s | self keysDo: [:ea | s nextPut: ea]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> last [
 	^ self values last
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> lastKey [
 	| last |
 	last := nil.
@@ -78,17 +79,17 @@ BTreeLeafNode >> lastKey [
 	^ last
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> leafForKey: aMagnitude [
 	^ self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> leavesFrom: start to: end do: aBlock [
 	aBlock value: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> valueForKey: aMagnitude ifAbsent: errorBlock [
 	| i |
 	i := keys findIndexForKey: aMagnitude.
@@ -98,7 +99,7 @@ BTreeLeafNode >> valueForKey: aMagnitude ifAbsent: errorBlock [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeLeafNode >> valueForKey: aMagnitude ifPresent: aBlock [
 	^ aBlock value: (self valueForKey: aMagnitude ifAbsent: [^ nil])
 ]

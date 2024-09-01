@@ -1,33 +1,34 @@
 Class {
-	#name : #BTree,
-	#superclass : #Collection,
+	#name : 'BTree',
+	#superclass : 'Collection',
 	#instVars : [
 		'root'
 	],
-	#category : #'Collections-BTree-Core'
+	#category : 'Collections-BTree',
+	#package : 'Collections-BTree'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTree class >> keys: aBTreeKeys [
 	^ self basicNew initializeWithKeys: aBTreeKeys
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTree class >> new [
 	^ self order: 5
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTree class >> order: aNumber [
 	^ self keys: (BTreeKeysArray new: aNumber)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTree >> at: aMagnitude [
 	^ self at: aMagnitude ifAbsent: [self error: aMagnitude printString, ' not found']
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTree >> at: aMagnitude ifAbsent: errorBlock [
        | leaf |
        leaf := root existingLeafForKey: aMagnitude.
@@ -35,12 +36,12 @@ BTree >> at: aMagnitude ifAbsent: errorBlock [
        ^ leaf valueForKey: aMagnitude ifAbsent: errorBlock
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 BTree >> at: aMagnitude ifAbsentPut: aBlock [
 	^ self at: aMagnitude ifAbsent: [self at: aMagnitude put: aBlock value]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTree >> at: aMagnitude ifPresent: aBlock [
 	| leaf |
 	leaf := root existingLeafForKey: aMagnitude.
@@ -48,7 +49,7 @@ BTree >> at: aMagnitude ifPresent: aBlock [
 	^ leaf valueForKey: aMagnitude ifPresent: aBlock
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 BTree >> at: aMagnitude put: anObject [
 	| leaf |
 	leaf := root leafForKey: aMagnitude.
@@ -57,49 +58,49 @@ BTree >> at: aMagnitude put: anObject [
 	^ anObject
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> commonKeysWith: aTree keysAndValuesDo: aBlock [
 	^ aTree depth < self depth
 		ifTrue: [aTree root commonKeysWith: root keysAndValuesDo: aBlock flip: true]
 		ifFalse: [root commonKeysWith: aTree root keysAndValuesDo: aBlock flip: false]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTree >> depth [
 	^ root depth
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> do: aBlock [
 	root allLeavesDo: [:ea | ea valuesDo: aBlock]
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 BTree >> emptyCopy [
 	^ BTree keys: root keyArray emptyCopy
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTree >> first [
 	^ root first
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> from: start do: aBlock [
 	self from: start to: nil keysAndValuesDo: [:k :v | aBlock value: v]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> from: start keysAndValuesDo: aBlock [
 	self from: start to: nil keysAndValuesDo: aBlock
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> from: start to: end do: aBlock [
 	self from: start to: end keysAndValuesDo: [:k :v | aBlock value: v]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> from: start to: end keysAndValuesDo: aBlock [
 	root leavesFrom: start to: end do:
 		[:ea |
@@ -110,45 +111,45 @@ BTree >> from: start to: end keysAndValuesDo: aBlock [
 					[aBlock value: k value: v]]]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 BTree >> initializeWithKeys: aBTreeKeys [
 	aBTreeKeys size > 3 ifFalse: [self error: 'The BTree order must be at least 4'].
 	root := BTreeLeafNode keys: aBTreeKeys
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTree >> keys [
 	^ Array streamContents:
 		[:s |
 		self keysDo: [:k | s nextPut: k]]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> keysAndValuesDo: aBlock [
 	root allLeavesDo: [:ea | ea keysAndValuesDo: aBlock]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> keysDo: aBlock [
 	root allLeavesDo: [:ea | ea keysDo: aBlock]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTree >> last [
 	^ root last
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTree >> order [
 	^ root size
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 BTree >> removeKey: aMagnitude [
 	^ self removeKey: aMagnitude ifAbsent: [self error: aMagnitude printString, ' not found.']
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 BTree >> removeKey: aMagnitude ifAbsent: aBlock [
 	| leaf |
 	leaf := root existingLeafForKey: aMagnitude.
@@ -157,29 +158,29 @@ BTree >> removeKey: aMagnitude ifAbsent: aBlock [
 	root := leaf root
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 BTree >> root [
 	^ root
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> upTo: end do: aBlock [
 	self from: nil to: end keysAndValuesDo: [:k :v | aBlock value: v]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> upTo: end keysAndValuesDo: aBlock [
 	self from: nil to: end keysAndValuesDo: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BTree >> values [
 	^ Array streamContents:
 		[:s |
 		self valuesDo: [:k | s nextPut: k]]
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 BTree >> valuesDo: aBlock [
 	root allLeavesDo: [:ea | ea valuesDo: aBlock]
 ]

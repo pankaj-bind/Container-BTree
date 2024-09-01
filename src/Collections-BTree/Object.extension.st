@@ -1,6 +1,6 @@
-Extension { #name : #Object }
+Extension { #name : 'Object' }
 
-{ #category : #'*collections-btree' }
+{ #category : '*collections-btree' }
 Object >> isTreeSet [
 	^ false
 ]

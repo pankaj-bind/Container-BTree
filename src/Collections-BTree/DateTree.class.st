@@ -2,32 +2,33 @@
 I provide a way to efficiently store and access date intervals. I am capable of answering the question, ""What events lie within a given date range."" 
 "
 Class {
-	#name : #DateTree,
-	#superclass : #Collection,
+	#name : 'DateTree',
+	#superclass : 'Collection',
 	#instVars : [
 		'startTimes',
 		'endTimes',
 		'events'
 	],
-	#category : #'Collections-BTree-Core'
+	#category : 'Collections-BTree',
+	#package : 'Collections-BTree'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DateTree >> at: aTimepan [
 	^ self at: aTimepan ifAbsent: [ self error: aTimepan printString, ' not found' ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DateTree >> at: aTimespan ifAbsent: aBlock [
 	^ events at: aTimespan ifAbsent: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DateTree >> at: aTimespan ifAbsentPut: exceptionBlock [
 	^ self at: aTimespan ifAbsent: [ self at: aTimespan put: exceptionBlock value ].
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 DateTree >> at: aTimespan put: anObject [
 	| timespans |
 	timespans := startTimes at: aTimespan start ifAbsentPut: [ Set new ].
@@ -38,7 +39,7 @@ DateTree >> at: aTimespan put: anObject [
 	^ anObject
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 DateTree >> between: startDateAndTime and: endDateAndTime [
 	"I return all events between a given start date and end date."
 	
@@ -48,7 +49,7 @@ DateTree >> between: startDateAndTime and: endDateAndTime [
 	^ values
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 DateTree >> between: startDateAndTime and: endDateAndTime keysAndValuesDo: aBlock [
 	| startOrLater endOrEarlier |
 
@@ -61,24 +62,24 @@ DateTree >> between: startDateAndTime and: endDateAndTime keysAndValuesDo: aBloc
 	(startOrLater intersection: endOrEarlier) do: [ :ea | aBlock value: ea value: (self at: ea) ].
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 DateTree >> do: aBlock [
 	events do: aBlock.
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 DateTree >> during: aTimespan [
 	"Return all events occuring within a given timespan"
 	
 	^ self between: aTimespan start and: aTimespan end
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DateTree >> endTimes [
 	^ endTimes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DateTree >> first [
 	| timespans |
 	timespans := startTimes first 
@@ -88,14 +89,14 @@ DateTree >> first [
 		ifAbsent: [ self errorEmptyCollection ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 DateTree >> initialize [
 	startTimes := BTree new.
 	endTimes := BTree new.
 	events := Dictionary new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DateTree >> keys [
 	| keys |
 	keys := Set new.
@@ -103,12 +104,12 @@ DateTree >> keys [
 	^ keys
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 DateTree >> keysAndValuesDo: aBlock [
 	events keysAndValuesDo: aBlock.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DateTree >> last [
 	| timespans |
 	timespans := endTimes last 
@@ -118,12 +119,12 @@ DateTree >> last [
 		ifAbsent: [ self errorEmptyCollection ]
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 DateTree >> removeKey: aTimespan [
 	self removeKey: aTimespan ifAbsent: [ self error: aTimespan printString, ' not found' ].
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 DateTree >> removeKey: aTimespan ifAbsent: exceptionBlock [
 	| set |
 	events removeKey: aTimespan ifAbsent: [^ exceptionBlock].
@@ -135,12 +136,12 @@ DateTree >> removeKey: aTimespan ifAbsent: exceptionBlock [
 	set isEmpty ifTrue: [ endTimes removeKey: aTimespan end ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DateTree >> startTimes [
 	^ startTimes
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 DateTree >> within: aDuration of: aDateAndTime [
 	"Returns all events within the given duration from the given date, in either direction."
 	

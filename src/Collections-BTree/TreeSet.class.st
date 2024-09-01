@@ -1,50 +1,51 @@
 Class {
-	#name : #TreeSet,
-	#superclass : #Collection,
+	#name : 'TreeSet',
+	#superclass : 'Collection',
 	#instVars : [
 		'tree',
 		'sortKey',
 		'equalsKey'
 	],
-	#category : #'Collections-BTree-Core'
+	#category : 'Collections-BTree',
+	#package : 'Collections-BTree'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TreeSet class >> defaultEqualitySelector [
 	^ #=
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TreeSet class >> defaultKeys [
 	^ BTreeKeysArray new: 64
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TreeSet class >> defaultSortSelector [
 	^ #hash
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TreeSet class >> keys: aBtreeKeys sortSelector: sortSymbol equalitySelector: equalsSymbol [
 	^ self basicNew initializeWithKeys: aBtreeKeys sortSelector: sortSymbol equalitySelector: equalsSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TreeSet class >> new [
 	^ self sortBy: self defaultSortSelector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TreeSet class >> sortBy: aSymbol [
 	^ self sortSelector: aSymbol equalitySelector: self defaultEqualitySelector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TreeSet class >> sortSelector: sortSymbol equalitySelector: equalsSymbol [
 	^ self keys: self defaultKeys sortSelector: sortSymbol equalitySelector: equalsSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 TreeSet class >> withAll: aCollection [
 	"Create a new collection containing all the elements from aCollection."
 
@@ -53,7 +54,7 @@ TreeSet class >> withAll: aCollection [
 		yourself
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> add: anObject [
 	| key bucket |
 	key := self keyForValue: anObject.
@@ -62,7 +63,7 @@ TreeSet >> add: anObject [
 		[tree at: key put: (bucket copyWith: anObject)].
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> addAll: aCollection [
 	| oldVals newVals combined |
 	(self isCompatibleTreeSetWith: aCollection) ifFalse: [^ super addAll: aCollection].
@@ -78,7 +79,7 @@ TreeSet >> addAll: aCollection [
 			tree at: key put: combined]]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> atIndex: index [
 	| count |
 	count := 0.
@@ -86,39 +87,39 @@ TreeSet >> atIndex: index [
 	self error: 'No item at index: ', index asString.
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 TreeSet >> bucket: anArray includes: anObject [
 	^ anArray anySatisfy: [:ea | (self value: anObject matches: ea)]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> do: aBlock [
 	tree do: [:bucket | bucket do: aBlock]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> equalitySelector [
 	^ equalsKey ifNil: [equalsKey := self class defaultEqualitySelector]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> first [
 	^ self atIndex: 1
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> includes: anObject [
 	| bucket |
 	bucket :=  tree at: (self keyForValue: anObject) ifAbsent: [^ false].
 	^ self bucket: bucket includes: anObject
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 TreeSet >> initializeWithKeys: aBtreeKeys sortSelector: sortSymbol equalitySelector: equalsSymbol [
 	self setTree: (BTree keys: aBtreeKeys) sortSelector: sortSymbol equalitySelector: equalsSymbol
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> intersection: aCollection [
 	| newTree intersection |
 	(self isCompatibleTreeSetWith: aCollection) ifFalse: [^ super intersection: aCollection].
@@ -133,7 +134,7 @@ TreeSet >> intersection: aCollection [
 	^ TreeSet basicNew setTree: newTree sortSelector: self sortSelector equalitySelector: self equalitySelector
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 TreeSet >> isCompatibleTreeSetWith: aCollection [
 	aCollection isTreeSet ifFalse: [^ false].
 	aCollection equalitySelector = self equalitySelector ifFalse: [^ false].
@@ -141,17 +142,17 @@ TreeSet >> isCompatibleTreeSetWith: aCollection [
 	^ true
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> isTreeSet [
 	^ true
 ]
 
-{ #category : #plugs }
+{ #category : 'plugs' }
 TreeSet >> keyForValue: anObject [
 	^ anObject perform: sortKey
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> remove: anObject [
 	| key bucket |
 	key := self keyForValue: anObject.
@@ -163,12 +164,12 @@ TreeSet >> remove: anObject [
 			ifFalse: [tree at: key put: bucket]]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> remove: anObject ifAbsent: aBlock [
 	self remove: anObject.
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> removeAllSuchThat: aBlock [
 	| changes remove |
 	changes := Dictionary new.
@@ -182,34 +183,34 @@ TreeSet >> removeAllSuchThat: aBlock [
 		tree at: key put: bucket]
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> second [
 	^ self atIndex: 2
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 TreeSet >> setTree: aBTree sortSelector: sortSymbol equalitySelector: equalsSymbol [
 	tree := aBTree.
 	sortKey := sortSymbol.
 	equalsKey := equalsSymbol
 ]
 
-{ #category : #public }
+{ #category : 'public' }
 TreeSet >> sortSelector [
 	^ sortKey
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 TreeSet >> tree [
 	^ tree
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 TreeSet >> tree: aBTree [
 	tree := aBTree
 ]
 
-{ #category : #plugs }
+{ #category : 'plugs' }
 TreeSet >> value: anObject matches: otherObject [
 	^ anObject perform: self equalitySelector with: otherObject
 ]

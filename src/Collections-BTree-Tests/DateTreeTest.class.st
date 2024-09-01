@@ -1,6 +1,6 @@
 Class {
-	#name : #DateTreeTest,
-	#superclass : #TestCase,
+	#name : 'DateTreeTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'now',
 		'sixHours',
@@ -10,10 +10,11 @@ Class {
 		'threeWeeks',
 		'timespans'
 	],
-	#category : #'Collections-BTree-Tests'
+	#category : 'Collections-BTree-Tests',
+	#package : 'Collections-BTree-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 DateTreeTest >> setUp [
 	now := DateAndTime now.
 	sixHours := now + 6 hours.
@@ -30,7 +31,7 @@ DateTreeTest >> setUp [
 	timespans add: (Timespan starting: sixHours ending: (sixHours + 6 hours)).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DateTreeTest >> testAdd [
 	| dateRanges timespan |
 	dateRanges := DateTree new.
@@ -39,7 +40,7 @@ DateTreeTest >> testAdd [
 	self assert: ((dateRanges at: timespan) = timespan)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DateTreeTest >> testClipEndRange [
 	| dateRanges returnedDates expectedDates |
 	
@@ -50,7 +51,7 @@ DateTreeTest >> testClipEndRange [
 	self assert: (returnedDates intersection: expectedDates) size = expectedDates size.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DateTreeTest >> testClipStartRange [
 	| dateRanges returnedDates expectedDates |
 	
@@ -61,7 +62,7 @@ DateTreeTest >> testClipStartRange [
 	self assert: (returnedDates intersection: expectedDates) size = expectedDates size.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DateTreeTest >> testFirstLast [
 	| dateRanges |
 	dateRanges := DateTree new.
@@ -78,7 +79,7 @@ DateTreeTest >> testFirstLast [
 	self assert: dateRanges last = #last
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DateTreeTest >> testInclusiveRange [
 	| dateRanges returnedDates expectedDates |
 	
@@ -89,7 +90,7 @@ DateTreeTest >> testInclusiveRange [
 	self assert: (returnedDates intersection: expectedDates) size = expectedDates size.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DateTreeTest >> testIteration [
 	| dateRanges |
 	
@@ -98,7 +99,7 @@ DateTreeTest >> testIteration [
 	dateRanges keysAndValuesDo: [ :key :val | self assert: (key asString) = val ].
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DateTreeTest >> testMissing [
 	| dateRanges timespan missingTimespan |
 	dateRanges := DateTree new.
@@ -108,7 +109,7 @@ DateTreeTest >> testMissing [
 	self assert: (dateRanges at: missingTimespan ifAbsent: [ false ]) = false.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DateTreeTest >> testRemove [
 	| dateRanges timespan |
 	dateRanges := DateTree new.

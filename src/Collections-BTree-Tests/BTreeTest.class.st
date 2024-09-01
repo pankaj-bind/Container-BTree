@@ -1,10 +1,11 @@
 Class {
-	#name : #BTreeTest,
-	#superclass : #TestCase,
-	#category : #'Collections-BTree-Tests'
+	#name : 'BTreeTest',
+	#superclass : 'TestCase',
+	#category : 'Collections-BTree-Tests',
+	#package : 'Collections-BTree-Tests'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 BTreeTest >> assertConsistent: aBTree [
 	| depths root |
 	root := aBTree root.
@@ -31,7 +32,7 @@ A B-Tree of order m is a search tree, where the data
 	self assert: depths size = 1.
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 BTreeTest >> assertSorted: aTree [
 	| last |
 	last := nil.
@@ -41,7 +42,7 @@ BTreeTest >> assertSorted: aTree [
 		last := k]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeTest >> checkTree: tree array: pairArray [
 	pairArray withIndexDo:
 		[:pair :i |
@@ -60,29 +61,29 @@ BTreeTest >> checkTree: tree array: pairArray [
 	 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeTest >> checkTree: tree items: count [
 	| pairArray  |
 	pairArray := ((1 to: count) collect: [:i | Array with: i asString with: i]) shuffled.
 	self checkTree: tree array: pairArray
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeTest >> checkTreeWithOrder: order items: count [
 	self checkTree: (BTree order: order) items: count
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testAddAndRetrieveWithSplit [
 	self checkTreeWithOrder: 4 items: 5
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testAddAndRetrieveWithTwoSplits [
 	self checkTreeWithOrder: 4 items: 17
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testCommonKeysDifferentValues [
 	| large small expectedResults results |
 	large := BTree new.
@@ -105,7 +106,7 @@ BTreeTest >> testCommonKeysDifferentValues [
 	self assert: results = expectedResults
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testCommonKeysSameValues [
 	| large small expectedResults results |
 	large := BTree new.
@@ -128,12 +129,12 @@ BTreeTest >> testCommonKeysSameValues [
 	self assert: results = expectedResults
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testEmptyTree [
 	self checkTreeWithOrder: 5 items: 0
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testFirstLast [
 	| tree |
 	tree := BTree new.
@@ -147,7 +148,7 @@ BTreeTest >> testFirstLast [
 		self assert: tree last = SmallInteger maxVal ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testFound [
 	| tree found |
 	found := false.
@@ -161,14 +162,14 @@ BTreeTest >> testFound [
 	self assert: found
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testLargeTree [
 	self checkTreeWithOrder: 8 items: 5000
 	
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testMissing [
 	| tree |
 	tree := BTree new.
@@ -179,12 +180,12 @@ BTreeTest >> testMissing [
 	self assert: (tree at: 3 ifAbsent: [42]) = 42.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testMultipleAddAndRetrieve [
 	self checkTreeWithOrder: 5 items: 3
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testRange [
 	| tree keys |
 	tree := BTree new.
@@ -200,7 +201,7 @@ BTreeTest >> testRange [
 	self assertConsistent: tree.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testRemoval [
 	| tree |
 	tree := BTree new.
@@ -216,7 +217,7 @@ BTreeTest >> testRemoval [
 	self assertConsistent: tree.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testRemoval2 [
 	| tree |
 	tree := BTree new.
@@ -225,7 +226,7 @@ BTreeTest >> testRemoval2 [
 	self assert: tree isEmpty
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testRemoveAll [
 	| tree |
 	tree := BTree new.
@@ -238,7 +239,7 @@ BTreeTest >> testRemoveAll [
 	self assertConsistent: tree.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testRemoveAllFailing [
 	| tree |
 	tree := BTree new.
@@ -251,7 +252,7 @@ BTreeTest >> testRemoveAllFailing [
 	self assertConsistent: tree.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testRemoveLots [
 	| tree |
 	tree := BTree new.
@@ -264,17 +265,17 @@ BTreeTest >> testRemoveLots [
 	self assertConsistent: tree.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testSimpleAddAndRetrieve [
 	self checkTreeWithOrder: 5 items: 1
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testStoreNil [
 	self checkTree: BTree new array: {{'x'. 1}. {'y'. nil}}
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BTreeTest >> testStringKeys [
 	self checkTree: (BTree keys: BTreeStringKeys new) items: 100
 ]

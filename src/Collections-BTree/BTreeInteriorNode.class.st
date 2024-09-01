@@ -1,11 +1,12 @@
 Class {
-	#name : #BTreeInteriorNode,
-	#superclass : #BTreeNode,
-	#type : #variable,
-	#category : #'Collections-BTree-Core'
+	#name : 'BTreeInteriorNode',
+	#superclass : 'BTreeNode',
+	#type : 'variable',
+	#category : 'Collections-BTree',
+	#package : 'Collections-BTree'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> childForKey: aMagnitude [
 	| index |
 	index := keys findIndexForKey: aMagnitude.
@@ -17,12 +18,12 @@ BTreeInteriorNode >> childForKey: aMagnitude [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> childrenDo: aBlock [
 	self valuesDo: aBlock
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> commonKeysWith: aNode keysAndValuesDo: aBlock flip: aBoolean [
 	| index |
 	aNode firstKey < self firstKey
@@ -36,12 +37,12 @@ BTreeInteriorNode >> commonKeysWith: aNode keysAndValuesDo: aBlock flip: aBoolea
 			ifNotNil: [ :c | c commonKeysWith: aNode keysAndValuesDo: aBlock flip: aBoolean ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> depth [
 	^ 1 + self firstChild depth
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> existingChildForKey: aMagnitude [
        "Unlike #childForKey:, this method looks for a child, but doesn't mess with the tree if it doesn't exist."
        | index |
@@ -51,7 +52,7 @@ BTreeInteriorNode >> existingChildForKey: aMagnitude [
                ifFalse: [^ self at: index].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> existingLeafForKey: aMagnitude [
        "Unlike #leafForKey:, this method looks for a leaf but doesn't mess with the tree if it doesn't exist."
        | child |
@@ -59,30 +60,30 @@ BTreeInteriorNode >> existingLeafForKey: aMagnitude [
        ^ child ifNotNil: [child existingLeafForKey: aMagnitude]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> first [
 	self childrenDo: [ :node | ^ node first ].
 	self error: 'this tree is empty'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> firstChild [
 	self childrenDo: [:ea | ^ ea].
 	self error: 'No children'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> insertKey: aMagnitude value: anObject at: index [
 	super insertKey: aMagnitude value: anObject at: index.
 	anObject parent: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> isLeaf [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> last [
 	| child |
 	child := nil.
@@ -91,12 +92,12 @@ BTreeInteriorNode >> last [
 	^ child last
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> leafForKey: aMagnitude [
 	^ (self childForKey: aMagnitude) leafForKey: aMagnitude
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> leavesFrom: start to: end do: aBlock [
 	| startIndex endIndex |
 	startIndex := start ifNil: [1] ifNotNil: [(keys findIndexForKey: start) max: 1].
@@ -104,7 +105,7 @@ BTreeInteriorNode >> leavesFrom: start to: end do: aBlock [
 	startIndex to: endIndex do: [:i | (self at: i) leavesFrom: start to: end do: aBlock]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> nextSiblingForChild: aNode [
 	| index |
 	index := keys findIndexForKey: aNode firstKey.
@@ -113,7 +114,7 @@ BTreeInteriorNode >> nextSiblingForChild: aNode [
 		ifFalse: [self at: index + 1]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BTreeInteriorNode >> updateKey: oldMagnitude to: newMagnitude [
        keys withIndexDo:
                [:key :i |
