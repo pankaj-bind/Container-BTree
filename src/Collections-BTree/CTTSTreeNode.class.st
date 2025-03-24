@@ -1,5 +1,5 @@
 Class {
-	#name : 'TSTreeNode',
+	#name : 'CTTSTreeNode',
 	#superclass : 'Object',
 	#instVars : [
 		'key',
@@ -13,34 +13,34 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-TSTreeNode class >> key: aCharacter [
+CTTSTreeNode class >> key: aCharacter [
 	^ self basicNew initializeWithKey: aCharacter
 ]
 
 { #category : 'private' }
-TSTreeNode >> canBeCulled [
+CTTSTreeNode >> canBeCulled [
 	^ self value isNil and: [ low isNil and: [ equal isNil and: [ high isNil ] ] ]
 ]
 
 { #category : 'private' }
-TSTreeNode >> cullNode: aNode [
+CTTSTreeNode >> cullNode: aNode [
 	low == aNode ifTrue: [^ low := nil].
 	equal == aNode ifTrue: [^ equal := nil].
 	high == aNode ifTrue: [^ high := nil]
 ]
 
 { #category : 'private' }
-TSTreeNode >> do: aBlock [
+CTTSTreeNode >> do: aBlock [
 	self nodesDo: [ :ea | ea value ifNotNil: aBlock ]
 ]
 
 { #category : 'private' }
-TSTreeNode >> initializeWithKey: aCharacter [
+CTTSTreeNode >> initializeWithKey: aCharacter [
 	key := aCharacter
 ]
 
 { #category : 'private' }
-TSTreeNode >> keysAndValuesDo: aBlock prefix: aString [
+CTTSTreeNode >> keysAndValuesDo: aBlock prefix: aString [
 	| fullKey |
 	fullKey := aString copyWith: key.
 	value ifNotNil: [aBlock value: fullKey value: value].
@@ -50,15 +50,7 @@ TSTreeNode >> keysAndValuesDo: aBlock prefix: aString [
 ]
 
 { #category : 'private' }
-TSTreeNode >> lookupString: aString startingAt: i [
-"inlined for performance"
-"
-	self
-		lookupString: aString
-		startingAt: i
-		whenFound: [^ value]
-		whenNil: [:c | ^ nil]
-		recurseWith: [:node :j | ^ node lookupString: aString startingAt: j]"
+CTTSTreeNode >> lookupString: aString startingAt: i [
 	| char |
 	char := aString at: i.
 	char = key
@@ -73,7 +65,7 @@ TSTreeNode >> lookupString: aString startingAt: i [
 ]
 
 { #category : 'private' }
-TSTreeNode >> lookupString: aString startingAt: i insert: anObject [
+CTTSTreeNode >> lookupString: aString startingAt: i insert: anObject [
 	self
 		lookupString: aString
 		startingAt: i
@@ -83,7 +75,7 @@ TSTreeNode >> lookupString: aString startingAt: i insert: anObject [
 ]
 
 { #category : 'private' }
-TSTreeNode >> lookupString: aString startingAt: i whenFound: foundBlock whenNil: nilBlock recurseWith: recurseBlock [
+CTTSTreeNode >> lookupString: aString startingAt: i whenFound: foundBlock whenNil: nilBlock recurseWith: recurseBlock [
 	| char |
 	char := aString at: i.
 	char = key
@@ -101,7 +93,7 @@ TSTreeNode >> lookupString: aString startingAt: i whenFound: foundBlock whenNil:
 ]
 
 { #category : 'private' }
-TSTreeNode >> matchesForPrefix: aString startingAt: i do: aBlock [
+CTTSTreeNode >> matchesForPrefix: aString startingAt: i do: aBlock [
 	self
 		lookupString: aString
 		startingAt: i
@@ -111,7 +103,7 @@ TSTreeNode >> matchesForPrefix: aString startingAt: i do: aBlock [
 ]
 
 { #category : 'private' }
-TSTreeNode >> matchesForString: aString startingAt: i distance: d do: aBlock nodesDo: nodeBlock [
+CTTSTreeNode >> matchesForString: aString startingAt: i distance: d do: aBlock nodesDo: nodeBlock [
 	
 	| char d2 |
 	nodeBlock value: self.
@@ -130,12 +122,12 @@ TSTreeNode >> matchesForString: aString startingAt: i distance: d do: aBlock nod
 ]
 
 { #category : 'private' }
-TSTreeNode >> newNodeWithKey: aCharacter [
+CTTSTreeNode >> newNodeWithKey: aCharacter [
 	^ self class key: aCharacter
 ]
 
 { #category : 'private' }
-TSTreeNode >> nodesDo: aBlock [
+CTTSTreeNode >> nodesDo: aBlock [
 	aBlock value: self.
 	low ifNotNil: [low nodesDo: aBlock].
 	equal ifNotNil: [equal nodesDo: aBlock].
@@ -143,7 +135,7 @@ TSTreeNode >> nodesDo: aBlock [
 ]
 
 { #category : 'private' }
-TSTreeNode >> removeString: aString startingAt: i [
+CTTSTreeNode >> removeString: aString startingAt: i [
 	| val |
 	self
 		lookupString: aString
@@ -159,11 +151,11 @@ TSTreeNode >> removeString: aString startingAt: i [
 ]
 
 { #category : 'private' }
-TSTreeNode >> value [
+CTTSTreeNode >> value [
 	^ value
 ]
 
 { #category : 'private' }
-TSTreeNode >> value: anObject [
+CTTSTreeNode >> value: anObject [
 	value := anObject
 ]

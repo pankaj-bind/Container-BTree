@@ -1,5 +1,5 @@
 Class {
-	#name : 'BTreeNode',
+	#name : 'CTBTreeNode',
 	#superclass : 'Object',
 	#type : 'variable',
 	#instVars : [
@@ -11,12 +11,12 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-BTreeNode class >> keys: anArray [
+CTBTreeNode class >> keys: anArray [
 	^ (self new: (anArray size)) keys: anArray
 ]
 
 { #category : 'enumerating' }
-BTreeNode >> allChildrenDo: aBlock [
+CTBTreeNode >> allChildrenDo: aBlock [
 	self childrenDo:
 		[:ea |
 		aBlock value: ea.
@@ -24,37 +24,37 @@ BTreeNode >> allChildrenDo: aBlock [
 ]
 
 { #category : 'enumerating' }
-BTreeNode >> allLeavesDo: aBlock [
+CTBTreeNode >> allLeavesDo: aBlock [
 	self withAllChildrenDo: [:ea | ea isLeaf ifTrue: [aBlock value: ea]]
 ]
 
 { #category : 'testing' }
-BTreeNode >> canGrow [
+CTBTreeNode >> canGrow [
 	^ keys canGrow
 ]
 
 { #category : 'testing' }
-BTreeNode >> canShrink [
+CTBTreeNode >> canShrink [
 	^ keys canShrink
 ]
 
 { #category : 'accessing' }
-BTreeNode >> children [
+CTBTreeNode >> children [
 	^ Array streamContents: [:s | self childrenDo: [:ea | s nextPut: ea]]
 ]
 
 { #category : 'enumerating' }
-BTreeNode >> childrenDo: aBlock [
+CTBTreeNode >> childrenDo: aBlock [
 	self subclassResponsibility
 ]
 
 { #category : 'accessing' }
-BTreeNode >> depth [
+CTBTreeNode >> depth [
 	^ parent ifNil: [1] ifNotNil: [1 + parent depth]
 ]
 
 { #category : 'private' }
-BTreeNode >> ensureParent [
+CTBTreeNode >> ensureParent [
 	parent ifNil:
 		 [self parent: (self interiorNodeClass keys: keys emptyCopy).
 		parent insertKey: self firstKey value: self].
@@ -62,17 +62,17 @@ BTreeNode >> ensureParent [
 ]
 
 { #category : 'accessing' }
-BTreeNode >> first [
+CTBTreeNode >> first [
 	self subclassResponsibility
 ]
 
 { #category : 'accessing' }
-BTreeNode >> firstKey [
+CTBTreeNode >> firstKey [
 	^ keys first
 ]
 
 { #category : 'private' }
-BTreeNode >> grow [
+CTBTreeNode >> grow [
 	| sibling |
 	parent ifNotNil:
 		[sibling := parent nextSiblingForChild: self.
@@ -80,11 +80,10 @@ BTreeNode >> grow [
 		sibling canShrink
 			ifTrue: [self stealFrom: sibling]
 			ifFalse: [self mergeWith: sibling]]
-				
 ]
 
 { #category : 'inserting' }
-BTreeNode >> insertKey: aMagnitude value: anObject [
+CTBTreeNode >> insertKey: aMagnitude value: anObject [
 	| index key |
 	index := keys findIndexForKey: aMagnitude.
 	index = 0 ifTrue:
@@ -114,57 +113,57 @@ BTreeNode >> insertKey: aMagnitude value: anObject [
 ]
 
 { #category : 'private' }
-BTreeNode >> insertKey: aMagnitude value: anObject at: index [
+CTBTreeNode >> insertKey: aMagnitude value: anObject at: index [
 	keys at: index put: aMagnitude.
 	self at: index put: anObject
 ]
 
 { #category : 'private' }
-BTreeNode >> interiorNodeClass [
-	^ BTreeInteriorNode
+CTBTreeNode >> interiorNodeClass [
+	^ CTBTreeInteriorNode
 ]
 
 { #category : 'testing' }
-BTreeNode >> isLeaf [
+CTBTreeNode >> isLeaf [
 	self subclassResponsibility
 ]
 
 { #category : 'private' }
-BTreeNode >> keyArray [
+CTBTreeNode >> keyArray [
 	^ keys
 ]
 
 { #category : 'private' }
-BTreeNode >> keys: anArray [
+CTBTreeNode >> keys: anArray [
 	keys := anArray
 ]
 
 { #category : 'enumerating' }
-BTreeNode >> keysAndValuesDo: aBlock [
+CTBTreeNode >> keysAndValuesDo: aBlock [
 	keys withIndexDo:
 		[:key :i |
 		key ifNotNil: [aBlock value: key value: (self at: i)]]
 ]
 
 { #category : 'enumerating' }
-BTreeNode >> keysDo: aBlock [
+CTBTreeNode >> keysDo: aBlock [
 	keys withIndexDo:
 		[:key :i |
 		key ifNotNil: [aBlock value: key] ifNil: [^ self]]
 ]
 
 { #category : 'accessing' }
-BTreeNode >> last [
+CTBTreeNode >> last [
 	self subclassResponsibility
 ]
 
 { #category : 'enumerating' }
-BTreeNode >> leavesFrom: start to: end do: aBlock [
+CTBTreeNode >> leavesFrom: start to: end do: aBlock [
 	self subclassResponsibility
 ]
 
 { #category : 'private' }
-BTreeNode >> mergeWith: aNode [		
+CTBTreeNode >> mergeWith: aNode [		
 	| oldKey |
 	oldKey := self firstKey.
 	aNode keysAndValuesDo:
@@ -175,22 +174,22 @@ BTreeNode >> mergeWith: aNode [
 ]
 
 { #category : 'accessing' }
-BTreeNode >> parent [
+CTBTreeNode >> parent [
 	^ parent
 ]
 
 { #category : 'accessing' }
-BTreeNode >> parent: aBTreeNode [
+CTBTreeNode >> parent: aBTreeNode [
 	parent := aBTreeNode
 ]
 
 { #category : 'removing' }
-BTreeNode >> removeKey: aMagnitude [
-	self removeKey: aMagnitude ifAbsent: [self error: aMagnitude printString, ' not found.'].
+CTBTreeNode >> removeKey: aMagnitude [
+	self removeKey: aMagnitude ifAbsent: [self error: aMagnitude printString, ' not found.']
 ]
 
 { #category : 'removing' }
-BTreeNode >> removeKey: aMagnitude ifAbsent: aBlock [
+CTBTreeNode >> removeKey: aMagnitude ifAbsent: aBlock [
 	| index key |
 	self canShrink ifFalse: [self grow].
 	
@@ -205,14 +204,14 @@ BTreeNode >> removeKey: aMagnitude ifAbsent: aBlock [
 ]
 
 { #category : 'accessing' }
-BTreeNode >> root [
+CTBTreeNode >> root [
 	^ parent
 		ifNil: [self]
 		ifNotNil: [parent root]
 ]
 
 { #category : 'private' }
-BTreeNode >> shiftLeftTo: index [
+CTBTreeNode >> shiftLeftTo: index [
 	keys shiftLeftTo: index.
 	index to: self size - 1 by: 1 do:
 		[:i |
@@ -221,7 +220,7 @@ BTreeNode >> shiftLeftTo: index [
 ]
 
 { #category : 'private' }
-BTreeNode >> shiftRightFrom: index [
+CTBTreeNode >> shiftRightFrom: index [
 	keys shiftRightFrom: index.
 	self size to: index+1 by: -1 do:
 		[:i |
@@ -229,7 +228,7 @@ BTreeNode >> shiftRightFrom: index [
 ]
 
 { #category : 'private' }
-BTreeNode >> split [
+CTBTreeNode >> split [
 	| other midpoint |
 	other := self class keys: keys emptyCopy.
 	midpoint := self size // 2 + 1.
@@ -243,7 +242,7 @@ BTreeNode >> split [
 ]
 
 { #category : 'private' }
-BTreeNode >> stealFrom: aNode [
+CTBTreeNode >> stealFrom: aNode [
 	| key value |
 	aNode firstKey > self firstKey
 		ifTrue: [value := aNode at: 1. key := aNode firstKey]
@@ -255,17 +254,17 @@ BTreeNode >> stealFrom: aNode [
 ]
 
 { #category : 'accessing' }
-BTreeNode >> values [
+CTBTreeNode >> values [
 	^ Array streamContents: [:s | self valuesDo: [:ea | s nextPut: ea]]
 ]
 
 { #category : 'enumerating' }
-BTreeNode >> valuesDo: aBlock [
+CTBTreeNode >> valuesDo: aBlock [
 	self keysAndValuesDo: [:k :v | aBlock value: v]
 ]
 
 { #category : 'enumerating' }
-BTreeNode >> withAllChildrenDo: aBlock [
+CTBTreeNode >> withAllChildrenDo: aBlock [
 	aBlock value: self.
 	self allChildrenDo: aBlock.
 ]

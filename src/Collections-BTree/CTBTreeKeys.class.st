@@ -1,52 +1,50 @@
 Class {
-	#name : 'BTreeKeys',
+	#name : 'CTBTreeKeys',
 	#superclass : 'Object',
 	#category : 'Collections-BTree',
 	#package : 'Collections-BTree'
 }
 
 { #category : 'as yet unclassified' }
-BTreeKeys >> canGrow [
+CTBTreeKeys >> canGrow [
 	^ (self at: self size) isNil
 ]
 
 { #category : 'as yet unclassified' }
-BTreeKeys >> canShrink [
+CTBTreeKeys >> canShrink [
 	^  (self at: self size // 2 + 1) notNil
 ]
 
 { #category : 'as yet unclassified' }
-BTreeKeys >> emptyCopy [
+CTBTreeKeys >> emptyCopy [
 	^ self class new: self size
 ]
 
 { #category : 'as yet unclassified' }
-BTreeKeys >> findIndexForKey: aMagnitude [
+CTBTreeKeys >> findIndexForKey: aMagnitude [
 	self withIndexDo:
 		[:key :i |
 		(key isNil or: [key > aMagnitude]) ifTrue:
 			[^ i - 1]].
 	^ self size
-
 ]
 
 { #category : 'as yet unclassified' }
-BTreeKeys >> first [
+CTBTreeKeys >> first [
 	^ self at: 1
 ]
 
 { #category : 'as yet unclassified' }
-BTreeKeys >> lastIndex [
+CTBTreeKeys >> lastIndex [
 	self withIndexDo:
 		[:key :i |
 		key isNil ifTrue:
 			[^ i - 1]].
 	^ self size
-
 ]
 
 { #category : 'as yet unclassified' }
-BTreeKeys >> shiftLeftTo: index [
+CTBTreeKeys >> shiftLeftTo: index [
 	index to: self size - 1 by: 1 do:
 		[:i |
 		self at: i put: (self at: i+1)].
@@ -54,14 +52,13 @@ BTreeKeys >> shiftLeftTo: index [
 ]
 
 { #category : 'as yet unclassified' }
-BTreeKeys >> shiftRightFrom: index [
+CTBTreeKeys >> shiftRightFrom: index [
 	self size to: index+1 by: -1 do:
 		[:i |
 		self at: i put: (self at: i - 1)]
-	
 ]
 
 { #category : 'as yet unclassified' }
-BTreeKeys >> withIndexDo: aBlock [
+CTBTreeKeys >> withIndexDo: aBlock [
 	1 to: self size do: [:i | aBlock value: (self at: i) value: i]
 ]
