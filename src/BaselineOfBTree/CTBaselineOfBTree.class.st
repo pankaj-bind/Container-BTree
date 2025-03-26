@@ -1,5 +1,5 @@
 Class {
-	#name : 'BaselineOfBTree',
+	#name : 'CTBaselineOfBTree',
 	#superclass : 'BaselineOf',
 	#instVars : [
 		'root'
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : 'baselines' }
-BaselineOfBTree >> baseline: spec [
+CTBaselineOfBTree >> baseline: spec [
 	<baseline>
 	
 	spec for: #common do: [ 

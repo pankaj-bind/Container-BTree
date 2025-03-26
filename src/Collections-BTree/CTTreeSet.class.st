@@ -1,5 +1,5 @@
 Class {
-	#name : 'TreeSet',
+	#name : 'CTTreeSet',
 	#superclass : 'Collection',
 	#instVars : [
 		'tree',
@@ -11,42 +11,42 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-TreeSet class >> defaultEqualitySelector [
+CTTreeSet class >> defaultEqualitySelector [
 	^ #=
 ]
 
 { #category : 'as yet unclassified' }
-TreeSet class >> defaultKeys [
-	^ BTreeKeysArray new: 64
+CTTreeSet class >> defaultKeys [
+	^ CTBTreeKeysArray new: 64
 ]
 
 { #category : 'as yet unclassified' }
-TreeSet class >> defaultSortSelector [
+CTTreeSet class >> defaultSortSelector [
 	^ #hash
 ]
 
 { #category : 'as yet unclassified' }
-TreeSet class >> keys: aBtreeKeys sortSelector: sortSymbol equalitySelector: equalsSymbol [
+CTTreeSet class >> keys: aBtreeKeys sortSelector: sortSymbol equalitySelector: equalsSymbol [
 	^ self basicNew initializeWithKeys: aBtreeKeys sortSelector: sortSymbol equalitySelector: equalsSymbol
 ]
 
 { #category : 'as yet unclassified' }
-TreeSet class >> new [
+CTTreeSet class >> new [
 	^ self sortBy: self defaultSortSelector
 ]
 
 { #category : 'as yet unclassified' }
-TreeSet class >> sortBy: aSymbol [
+CTTreeSet class >> sortBy: aSymbol [
 	^ self sortSelector: aSymbol equalitySelector: self defaultEqualitySelector
 ]
 
 { #category : 'as yet unclassified' }
-TreeSet class >> sortSelector: sortSymbol equalitySelector: equalsSymbol [
+CTTreeSet class >> sortSelector: sortSymbol equalitySelector: equalsSymbol [
 	^ self keys: self defaultKeys sortSelector: sortSymbol equalitySelector: equalsSymbol
 ]
 
 { #category : 'as yet unclassified' }
-TreeSet class >> withAll: aCollection [
+CTTreeSet class >> withAll: aCollection [
 	"Create a new collection containing all the elements from aCollection."
 
 	^ self new
@@ -55,7 +55,7 @@ TreeSet class >> withAll: aCollection [
 ]
 
 { #category : 'public' }
-TreeSet >> add: anObject [
+CTTreeSet >> add: anObject [
 	| key bucket |
 	key := self keyForValue: anObject.
 	bucket := tree at: key ifAbsent: [#()].
@@ -64,7 +64,7 @@ TreeSet >> add: anObject [
 ]
 
 { #category : 'public' }
-TreeSet >> addAll: aCollection [
+CTTreeSet >> addAll: aCollection [
 	| oldVals newVals combined |
 	(self isCompatibleTreeSetWith: aCollection) ifFalse: [^ super addAll: aCollection].
 
@@ -80,7 +80,7 @@ TreeSet >> addAll: aCollection [
 ]
 
 { #category : 'public' }
-TreeSet >> atIndex: index [
+CTTreeSet >> atIndex: index [
 	| count |
 	count := 0.
 	self do: [:ea | (count := count + 1) = index ifTrue: [^ ea]].
@@ -88,39 +88,39 @@ TreeSet >> atIndex: index [
 ]
 
 { #category : 'private' }
-TreeSet >> bucket: anArray includes: anObject [
+CTTreeSet >> bucket: anArray includes: anObject [
 	^ anArray anySatisfy: [:ea | (self value: anObject matches: ea)]
 ]
 
 { #category : 'public' }
-TreeSet >> do: aBlock [
+CTTreeSet >> do: aBlock [
 	tree do: [:bucket | bucket do: aBlock]
 ]
 
 { #category : 'public' }
-TreeSet >> equalitySelector [
+CTTreeSet >> equalitySelector [
 	^ equalsKey ifNil: [equalsKey := self class defaultEqualitySelector]
 ]
 
 { #category : 'public' }
-TreeSet >> first [
+CTTreeSet >> first [
 	^ self atIndex: 1
 ]
 
 { #category : 'public' }
-TreeSet >> includes: anObject [
+CTTreeSet >> includes: anObject [
 	| bucket |
 	bucket :=  tree at: (self keyForValue: anObject) ifAbsent: [^ false].
 	^ self bucket: bucket includes: anObject
 ]
 
 { #category : 'initialize-release' }
-TreeSet >> initializeWithKeys: aBtreeKeys sortSelector: sortSymbol equalitySelector: equalsSymbol [
-	self setTree: (BTree keys: aBtreeKeys) sortSelector: sortSymbol equalitySelector: equalsSymbol
+CTTreeSet >> initializeWithKeys: aBtreeKeys sortSelector: sortSymbol equalitySelector: equalsSymbol [
+	self setTree: (CTBTree keys: aBtreeKeys) sortSelector: sortSymbol equalitySelector: equalsSymbol
 ]
 
 { #category : 'public' }
-TreeSet >> intersection: aCollection [
+CTTreeSet >> intersection: aCollection [
 	| newTree intersection |
 	(self isCompatibleTreeSetWith: aCollection) ifFalse: [^ super intersection: aCollection].
 
@@ -131,11 +131,11 @@ TreeSet >> intersection: aCollection [
 		intersection := left select: [:ea | self bucket: right includes: ea].
 		intersection isEmpty ifFalse: [newTree at: key put: intersection]].
 	
-	^ TreeSet basicNew setTree: newTree sortSelector: self sortSelector equalitySelector: self equalitySelector
+	^ CTTreeSet basicNew setTree: newTree sortSelector: self sortSelector equalitySelector: self equalitySelector
 ]
 
 { #category : 'private' }
-TreeSet >> isCompatibleTreeSetWith: aCollection [
+CTTreeSet >> isCompatibleTreeSetWith: aCollection [
 	aCollection isTreeSet ifFalse: [^ false].
 	aCollection equalitySelector = self equalitySelector ifFalse: [^ false].
 	aCollection sortSelector = self sortSelector ifFalse: [^ false].
@@ -143,17 +143,17 @@ TreeSet >> isCompatibleTreeSetWith: aCollection [
 ]
 
 { #category : 'public' }
-TreeSet >> isTreeSet [
+CTTreeSet >> isTreeSet [
 	^ true
 ]
 
 { #category : 'plugs' }
-TreeSet >> keyForValue: anObject [
+CTTreeSet >> keyForValue: anObject [
 	^ anObject perform: sortKey
 ]
 
 { #category : 'public' }
-TreeSet >> remove: anObject [
+CTTreeSet >> remove: anObject [
 	| key bucket |
 	key := self keyForValue: anObject.
 	bucket := tree at: key ifAbsent: [^ self].
@@ -165,12 +165,12 @@ TreeSet >> remove: anObject [
 ]
 
 { #category : 'public' }
-TreeSet >> remove: anObject ifAbsent: aBlock [
+CTTreeSet >> remove: anObject ifAbsent: aBlock [
 	self remove: anObject.
 ]
 
 { #category : 'public' }
-TreeSet >> removeAllSuchThat: aBlock [
+CTTreeSet >> removeAllSuchThat: aBlock [
 	| changes remove |
 	changes := Dictionary new.
 	tree keysAndValuesDo:
@@ -184,33 +184,33 @@ TreeSet >> removeAllSuchThat: aBlock [
 ]
 
 { #category : 'public' }
-TreeSet >> second [
+CTTreeSet >> second [
 	^ self atIndex: 2
 ]
 
 { #category : 'initialize-release' }
-TreeSet >> setTree: aBTree sortSelector: sortSymbol equalitySelector: equalsSymbol [
+CTTreeSet >> setTree: aBTree sortSelector: sortSymbol equalitySelector: equalsSymbol [
 	tree := aBTree.
 	sortKey := sortSymbol.
 	equalsKey := equalsSymbol
 ]
 
 { #category : 'public' }
-TreeSet >> sortSelector [
+CTTreeSet >> sortSelector [
 	^ sortKey
 ]
 
 { #category : 'private' }
-TreeSet >> tree [
+CTTreeSet >> tree [
 	^ tree
 ]
 
 { #category : 'private' }
-TreeSet >> tree: aBTree [
+CTTreeSet >> tree: aBTree [
 	tree := aBTree
 ]
 
 { #category : 'plugs' }
-TreeSet >> value: anObject matches: otherObject [
+CTTreeSet >> value: anObject matches: otherObject [
 	^ anObject perform: self equalitySelector with: otherObject
 ]

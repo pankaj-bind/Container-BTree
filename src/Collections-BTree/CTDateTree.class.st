@@ -2,7 +2,7 @@
 I provide a way to efficiently store and access date intervals. I am capable of answering the question, ""What events lie within a given date range."" 
 "
 Class {
-	#name : 'DateTree',
+	#name : 'CTDateTree',
 	#superclass : 'Collection',
 	#instVars : [
 		'startTimes',
@@ -14,22 +14,22 @@ Class {
 }
 
 { #category : 'accessing' }
-DateTree >> at: aTimepan [
+CTDateTree >> at: aTimepan [
 	^ self at: aTimepan ifAbsent: [ self error: aTimepan printString, ' not found' ]
 ]
 
 { #category : 'accessing' }
-DateTree >> at: aTimespan ifAbsent: aBlock [
+CTDateTree >> at: aTimespan ifAbsent: aBlock [
 	^ events at: aTimespan ifAbsent: aBlock
 ]
 
 { #category : 'accessing' }
-DateTree >> at: aTimespan ifAbsentPut: exceptionBlock [
+CTDateTree >> at: aTimespan ifAbsentPut: exceptionBlock [
 	^ self at: aTimespan ifAbsent: [ self at: aTimespan put: exceptionBlock value ].
 ]
 
 { #category : 'adding' }
-DateTree >> at: aTimespan put: anObject [
+CTDateTree >> at: aTimespan put: anObject [
 	| timespans |
 	timespans := startTimes at: aTimespan start ifAbsentPut: [ Set new ].
 	timespans add: aTimespan.
@@ -40,22 +40,22 @@ DateTree >> at: aTimespan put: anObject [
 ]
 
 { #category : 'enumerating' }
-DateTree >> between: startDateAndTime and: endDateAndTime [
+CTDateTree >> between: startDateAndTime and: endDateAndTime [
 	"I return all events between a given start date and end date."
 	
 	| values |
-	values := TreeSet new.
+	values := CTTreeSet new.
 	self between: startDateAndTime and: endDateAndTime keysAndValuesDo: [ :key :val | values add: val ].
 	^ values
 ]
 
 { #category : 'enumerating' }
-DateTree >> between: startDateAndTime and: endDateAndTime keysAndValuesDo: aBlock [
+CTDateTree >> between: startDateAndTime and: endDateAndTime keysAndValuesDo: aBlock [
 	| startOrLater endOrEarlier |
 
 	"This adds stuff really slowly; I'm not sure what to do about that yet"
-	startOrLater := TreeSet new.
-	endOrEarlier := TreeSet new.
+	startOrLater := CTTreeSet new.
+	endOrEarlier := CTTreeSet new.
 	startTimes from: DateAndTime epoch to: endDateAndTime do: [ :ea | endOrEarlier addAll: ea ].
 	"Kluge to make the ranges work."
 	endTimes from: startDateAndTime to: (DateAndTime year: 2029 day: 1) do: [ :ea | startOrLater addAll: ea ].
@@ -63,24 +63,24 @@ DateTree >> between: startDateAndTime and: endDateAndTime keysAndValuesDo: aBloc
 ]
 
 { #category : 'enumerating' }
-DateTree >> do: aBlock [
+CTDateTree >> do: aBlock [
 	events do: aBlock.
 ]
 
 { #category : 'enumerating' }
-DateTree >> during: aTimespan [
+CTDateTree >> during: aTimespan [
 	"Return all events occuring within a given timespan"
 	
 	^ self between: aTimespan start and: aTimespan end
 ]
 
 { #category : 'accessing' }
-DateTree >> endTimes [
+CTDateTree >> endTimes [
 	^ endTimes
 ]
 
 { #category : 'accessing' }
-DateTree >> first [
+CTDateTree >> first [
 	| timespans |
 	timespans := startTimes first 
 		asSortedCollection: [ :a :b | a start <= b start ].
@@ -90,14 +90,14 @@ DateTree >> first [
 ]
 
 { #category : 'initialize-release' }
-DateTree >> initialize [
-	startTimes := BTree new.
-	endTimes := BTree new.
+CTDateTree >> initialize [
+	startTimes := CTBTree new.
+	endTimes := CTBTree new.
 	events := Dictionary new
 ]
 
 { #category : 'accessing' }
-DateTree >> keys [
+CTDateTree >> keys [
 	| keys |
 	keys := Set new.
 	self keysAndValuesDo: [:k :v | keys add: k].
@@ -105,12 +105,12 @@ DateTree >> keys [
 ]
 
 { #category : 'enumerating' }
-DateTree >> keysAndValuesDo: aBlock [
+CTDateTree >> keysAndValuesDo: aBlock [
 	events keysAndValuesDo: aBlock.
 ]
 
 { #category : 'accessing' }
-DateTree >> last [
+CTDateTree >> last [
 	| timespans |
 	timespans := endTimes last 
 		asSortedCollection: [ :a :b | a end <= b end ].
@@ -120,12 +120,12 @@ DateTree >> last [
 ]
 
 { #category : 'adding' }
-DateTree >> removeKey: aTimespan [
+CTDateTree >> removeKey: aTimespan [
 	self removeKey: aTimespan ifAbsent: [ self error: aTimespan printString, ' not found' ].
 ]
 
 { #category : 'adding' }
-DateTree >> removeKey: aTimespan ifAbsent: exceptionBlock [
+CTDateTree >> removeKey: aTimespan ifAbsent: exceptionBlock [
 	| set |
 	events removeKey: aTimespan ifAbsent: [^ exceptionBlock].
 	
@@ -137,12 +137,12 @@ DateTree >> removeKey: aTimespan ifAbsent: exceptionBlock [
 ]
 
 { #category : 'accessing' }
-DateTree >> startTimes [
+CTDateTree >> startTimes [
 	^ startTimes
 ]
 
 { #category : 'enumerating' }
-DateTree >> within: aDuration of: aDateAndTime [
+CTDateTree >> within: aDuration of: aDateAndTime [
 	"Returns all events within the given duration from the given date, in either direction."
 	
 	^ self between: (aDateAndTime - aDuration) and: (aDateAndTime + aDuration)

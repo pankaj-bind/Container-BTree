@@ -1,18 +1,18 @@
 Class {
-	#name : 'BTreeLeafNode',
-	#superclass : 'BTreeNode',
+	#name : 'CTBTreeLeafNode',
+	#superclass : 'CTBTreeNode',
 	#type : 'variable',
 	#category : 'Collections-BTree',
 	#package : 'Collections-BTree'
 }
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> childrenDo: aBlock [
+CTBTreeLeafNode >> childrenDo: aBlock [
 	"no children"
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> commonKeysWith: aNode keysAndValuesDo: aBlock flip: aBoolean [
+CTBTreeLeafNode >> commonKeysWith: aNode keysAndValuesDo: aBlock flip: aBoolean [
 	| index key block leaf advanceKey last |
 
 	aNode firstKey ifNil: [^ self].
@@ -38,41 +38,40 @@ BTreeLeafNode >> commonKeysWith: aNode keysAndValuesDo: aBlock flip: aBoolean [
 			[key < otherKey] whileTrue: advanceKey.
 			key = otherKey ifTrue: [block value: key value: (self at: index) value: otherValue]].
 		key > leaf lastKey ifFalse: advanceKey]] repeat
-
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> depth [
+CTBTreeLeafNode >> depth [
 	^ 1
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> existingLeafForKey: aMagnitude [
+CTBTreeLeafNode >> existingLeafForKey: aMagnitude [
        ^ self
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> first [
+CTBTreeLeafNode >> first [
 	^ self values first
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> isLeaf [
+CTBTreeLeafNode >> isLeaf [
 	^ true
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> keys [
+CTBTreeLeafNode >> keys [
 	^ Array streamContents: [:s | self keysDo: [:ea | s nextPut: ea]]
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> last [
+CTBTreeLeafNode >> last [
 	^ self values last
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> lastKey [
+CTBTreeLeafNode >> lastKey [
 	| last |
 	last := nil.
 	self keysDo: [:k | last := k].
@@ -80,26 +79,25 @@ BTreeLeafNode >> lastKey [
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> leafForKey: aMagnitude [
+CTBTreeLeafNode >> leafForKey: aMagnitude [
 	^ self
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> leavesFrom: start to: end do: aBlock [
+CTBTreeLeafNode >> leavesFrom: start to: end do: aBlock [
 	aBlock value: self
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> valueForKey: aMagnitude ifAbsent: errorBlock [
+CTBTreeLeafNode >> valueForKey: aMagnitude ifAbsent: errorBlock [
 	| i |
 	i := keys findIndexForKey: aMagnitude.
 	^ (i > 0 and: [(keys at: i) = aMagnitude])
 		ifTrue: [self at: i]
 		ifFalse: [errorBlock value]
-
 ]
 
 { #category : 'as yet unclassified' }
-BTreeLeafNode >> valueForKey: aMagnitude ifPresent: aBlock [
+CTBTreeLeafNode >> valueForKey: aMagnitude ifPresent: aBlock [
 	^ aBlock value: (self valueForKey: aMagnitude ifAbsent: [^ nil])
 ]

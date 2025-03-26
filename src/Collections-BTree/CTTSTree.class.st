@@ -1,5 +1,5 @@
 Class {
-	#name : 'TSTree',
+	#name : 'CTTSTree',
 	#superclass : 'Collection',
 	#instVars : [
 		'root',
@@ -10,12 +10,12 @@ Class {
 }
 
 { #category : 'accessing' }
-TSTree >> at: aString [
+CTTSTree >> at: aString [
 	^ self at: aString ifAbsent: [self error: aString printString, ' not found']
 ]
 
 { #category : 'accessing' }
-TSTree >> at: aString ifAbsent: exceptionBlock [
+CTTSTree >> at: aString ifAbsent: exceptionBlock [
 	aString isEmpty ifTrue: [^ emptyValue ifNil: [exceptionBlock value]].
 	root ifNil: [^ exceptionBlock value].
 	
@@ -23,38 +23,38 @@ TSTree >> at: aString ifAbsent: exceptionBlock [
 ]
 
 { #category : 'accessing' }
-TSTree >> at: aString ifAbsentPut: exceptionBlock [
+CTTSTree >> at: aString ifAbsentPut: exceptionBlock [
 	^ self at: aString ifAbsent: [self at: aString put: exceptionBlock value]
 ]
 
 { #category : 'accessing' }
-TSTree >> at: aString put: anObject [
+CTTSTree >> at: aString put: anObject [
 	aString isEmpty ifTrue: [^ emptyValue := anObject].
-	root ifNil: [root := TSTreeNode key: aString first].
+	root ifNil: [root := CTTSTreeNode key: aString first].
 	root lookupString: aString startingAt: 1 insert: anObject.
 	^ anObject
 ]
 
 { #category : 'enumerating' }
-TSTree >> do: aBlock [
+CTTSTree >> do: aBlock [
 	emptyValue ifNotNil: aBlock.
 	root ifNotNil: [ root do: aBlock ]
 ]
 
 { #category : 'accessing' }
-TSTree >> keys [
+CTTSTree >> keys [
 	^ Array streamContents: [:s | self keysAndValuesDo: [:k :v | s nextPut: k]]
 ]
 
 { #category : 'enumerating' }
-TSTree >> keysAndValuesDo: aBlock [
+CTTSTree >> keysAndValuesDo: aBlock [
 	emptyValue ifNotNil:
 		[aBlock value: '' value: emptyValue].
 	root ifNotNil: [root keysAndValuesDo: aBlock prefix: '']
 ]
 
 { #category : 'matching' }
-TSTree >> matchesForPrefix: aString [
+CTTSTree >> matchesForPrefix: aString [
 	^ Array streamContents:
 		[:s |
 		self matchesForPrefix: aString do:
@@ -63,14 +63,14 @@ TSTree >> matchesForPrefix: aString [
 ]
 
 { #category : 'matching' }
-TSTree >> matchesForPrefix: aString do: aBlock [
+CTTSTree >> matchesForPrefix: aString do: aBlock [
 	aString isEmpty
 		ifTrue: [self do: aBlock]
 		ifFalse: [root ifNotNil: [root matchesForPrefix: aString startingAt: 1 do: aBlock]]
 ]
 
 { #category : 'matching' }
-TSTree >> matchesForString: aString distance: aNumber [
+CTTSTree >> matchesForString: aString distance: aNumber [
 	^ Array streamContents:
 		[:s |
 		self matchesForString: aString distance: aNumber do:
@@ -79,12 +79,12 @@ TSTree >> matchesForString: aString distance: aNumber [
 ]
 
 { #category : 'matching' }
-TSTree >> matchesForString: aString distance: aNumber do: aBlock [
+CTTSTree >> matchesForString: aString distance: aNumber do: aBlock [
 	self matchesForString: aString distance: aNumber limitNodes: nil do: aBlock
 ]
 
 { #category : 'matching' }
-TSTree >> matchesForString: aString distance: aNumber limitNodes: maxNodes do: aBlock [
+CTTSTree >> matchesForString: aString distance: aNumber limitNodes: maxNodes do: aBlock [
 	| nodeCount |
 	nodeCount := 0.
 	aString isEmpty ifTrue: [^ self].
@@ -96,12 +96,12 @@ TSTree >> matchesForString: aString distance: aNumber limitNodes: maxNodes do: a
 ]
 
 { #category : 'accessing' }
-TSTree >> removeKey: aString [
+CTTSTree >> removeKey: aString [
 	^ self removeKey: aString ifAbsent: [self error: 'Could not find key ', aString printString]
 ]
 
 { #category : 'accessing' }
-TSTree >> removeKey: aString ifAbsent: errorBlock [
+CTTSTree >> removeKey: aString ifAbsent: errorBlock [
 	| val |
 	^ root ifNil: errorBlock
 		ifNotNil:
@@ -111,6 +111,6 @@ TSTree >> removeKey: aString ifAbsent: errorBlock [
 ]
 
 { #category : 'accessing' }
-TSTree >> values [
+CTTSTree >> values [
 	^ Array streamContents: [:s | self do: [:ea | s nextPut: ea]]
 ]
